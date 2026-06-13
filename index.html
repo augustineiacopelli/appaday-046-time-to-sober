@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Time to Sober — AppADay 046</title>
+<style>
+  :root{
+    --bg:#1a1410;
+    --bg2:#241b15;
+    --card:#2c2118;
+    --amber:#d98e3f;
+    --amber-light:#f3b25c;
+    --text:#f1e6d8;
+    --text-dim:#b8a995;
+    --line:#3d2f23;
+    --good:#7fae6e;
+    --warn:#d9743f;
+    --danger:#cf4b4b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{min-height:100dvh;}
+  body{
+    font-family:'Georgia', 'Times New Roman', serif;
+    background:radial-gradient(circle at 50% 0%, var(--bg2), var(--bg));
+    color:var(--text);
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .header{
+    width:100%;
+    max-width:560px;
+    padding:14px 18px 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:13px;
+    color:var(--text-dim);
+    letter-spacing:0.04em;
+  }
+  .header a{color:var(--amber-light); text-decoration:none;}
+  .wrap{
+    width:100%;
+    max-width:560px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    padding:18px 18px 40px;
+    gap:18px;
+  }
+  .title{
+    text-align:center;
+    padding:6px 0 4px;
+  }
+  .title h1{
+    font-size:30px;
+    font-weight:400;
+    letter-spacing:0.03em;
+    color:var(--amber-light);
+  }
+  .title .sub{
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:12.5px;
+    color:var(--text-dim);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin-top:4px;
+  }
+  .card{
+    background:linear-gradient(180deg, var(--card), #251c14);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px;
+  }
+  .profile-row{
+    display:flex;
+    gap:12px;
+  }
+  .field{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  label{
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--text-dim);
+  }
+  input[type=number]{
+    background:#1f1712;
+    border:1px solid var(--line);
+    border-radius:8px;
+    color:var(--text);
+    font-size:18px;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    padding:10px 12px;
+    width:100%;
+  }
+  input[type=number]:focus{outline:none; border-color:var(--amber);}
+  .seg{
+    display:flex;
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .seg button{
+    flex:1;
+    background:#1f1712;
+    color:var(--text-dim);
+    border:none;
+    padding:10px 0;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .seg button.active{
+    background:var(--amber);
+    color:#1a1410;
+  }
+  .section-label{
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--text-dim);
+    margin-bottom:10px;
+  }
+  .presets{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:12px;
+  }
+  .preset-btn{
+    background:#1f1712;
+    border:1px solid var(--line);
+    color:var(--text);
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:12.5px;
+    padding:8px 12px;
+    border-radius:20px;
+    cursor:pointer;
+  }
+  .preset-btn:active{background:var(--amber); color:#1a1410;}
+  .drink-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:4px;
+  }
+  .drink-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#1f1712;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 12px;
+  }
+  .drink-info{flex:1; min-width:0; overflow:hidden;}
+  .drink-name{font-size:15px; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .drink-detail{
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:11.5px;
+    color:var(--text-dim);
+    margin-top:2px;
+  }
+  .drink-row input[type=number]{
+    width:60px;
+    text-align:center;
+    padding:8px 4px;
+    font-size:15px;
+  }
+  .qty-controls{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .qty-btn{
+    width:30px; height:30px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:#1a1410;
+    color:var(--amber-light);
+    font-size:18px;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .remove-btn{
+    width:30px; height:30px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--danger);
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .empty-msg{
+    text-align:center;
+    color:var(--text-dim);
+    font-size:13px;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    padding:18px 0;
+  }
+  .add-custom{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+  }
+  .add-custom input{flex:1;}
+  .add-custom button{
+    background:var(--amber);
+    color:#1a1410;
+    border:none;
+    border-radius:8px;
+    padding:0 16px;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+  }
+  .custom-fields{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+  }
+  .custom-fields .field{font-size:11px;}
+  .results{
+    text-align:center;
+  }
+  .bac-value{
+    font-size:46px;
+    color:var(--amber-light);
+    font-weight:400;
+    letter-spacing:0.02em;
+  }
+  .bac-label{
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    color:var(--text-dim);
+    margin-top:2px;
+  }
+  .status-pill{
+    display:inline-block;
+    margin-top:10px;
+    padding:6px 16px;
+    border-radius:20px;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:0.04em;
+  }
+  .status-good{background:rgba(127,174,110,0.18); color:var(--good);}
+  .status-warn{background:rgba(217,116,63,0.18); color:var(--warn);}
+  .status-danger{background:rgba(207,75,75,0.18); color:var(--danger);}
+  .bar-track{
+    height:8px;
+    border-radius:5px;
+    background:#1f1712;
+    margin:18px 0 6px;
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .bar-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--good), var(--amber), var(--danger));
+    border-radius:5px;
+    transition:width 0.4s ease;
+  }
+  .bar-labels{
+    display:flex;
+    justify-content:space-between;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:10.5px;
+    color:var(--text-dim);
+  }
+  .sober-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+  }
+  .sober-label{
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--text-dim);
+  }
+  .sober-time{
+    font-size:22px;
+    color:var(--text);
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-weight:600;
+  }
+  .effects-box{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+    text-align:left;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:12.5px;
+    color:var(--text-dim);
+    line-height:1.65;
+  }
+  .effects-box .effects-title{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--amber-light);
+    margin-bottom:6px;
+  }
+  .footnote{
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:10.5px;
+    color:var(--text-dim);
+    line-height:1.6;
+    text-align:center;
+    padding:0 6px;
+  }
+  .footnote b{color:var(--amber-light);}
+
+  .drink-row{
+    flex-direction:column;
+    align-items:stretch;
+    gap:10px;
+  }
+  .drink-row-top{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .time-row{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:10px;
+  }
+  .time-field{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+  }
+  .time-field label{
+    flex:0 0 56px;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--text-dim);
+  }
+  input[type=time]{
+    background:#1a1410;
+    border:1px solid var(--line);
+    border-radius:8px;
+    color:var(--text);
+    font-size:13px;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    padding:8px 6px;
+    flex:1 1 auto;
+    width:1px;
+    min-width:0;
+    box-sizing:border-box;
+  }
+  input[type=time]:focus{outline:none; border-color:var(--amber);}
+
+  .chart-card{padding:16px 14px 12px;}
+  .chart-wrap{
+    position:relative;
+    width:100%;
+    height:200px;
+  }
+  #bacChart{
+    width:100%;
+    height:100%;
+    display:block;
+  }
+  .chart-legend{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-top:10px;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:11px;
+    color:var(--text-dim);
+  }
+  .legend-dot{
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    margin-right:5px;
+    vertical-align:middle;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span>AppADay · 046 · U</span>
+  <a href="https://augustineiacopelli.github.io/appaday/">← Portfolio</a>
+</div>
+
+<div class="wrap">
+
+  <div class="title">
+    <h1>Time to Sober</h1>
+    <div class="sub">ABV-Based Blood Alcohol Estimator</div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Your Details</div>
+    <div class="profile-row">
+      <div class="field">
+        <label>Body Weight (lb)</label>
+        <input type="number" id="weight" value="180" min="60" max="500" inputmode="numeric">
+      </div>
+      <div class="field">
+        <label>Sex (for water %)</label>
+        <div class="seg">
+          <button id="sexMale" class="active" onclick="setSex('male')">Male</button>
+          <button id="sexFemale" onclick="setSex('female')">Female</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Add a Drink</div>
+    <div class="presets">
+      <button class="preset-btn" onclick="addPreset('Beer (12oz, 5%)',12,5,20)">Beer 12oz · 5%</button>
+      <button class="preset-btn" onclick="addPreset('Craft Beer (16oz, 7%)',16,7,25)">Craft 16oz · 7%</button>
+      <button class="preset-btn" onclick="addPreset('Wine (5oz, 12%)',5,12,15)">Wine 5oz · 12%</button>
+      <button class="preset-btn" onclick="addPreset('Shot (1.5oz, 40%)',1.5,40,3)">Shot 1.5oz · 40%</button>
+      <button class="preset-btn" onclick="addPreset('Cocktail (4oz, 15%)',4,15,15)">Cocktail 4oz · 15%</button>
+    </div>
+    <div class="custom-fields">
+      <div class="field">
+        <label>Oz</label>
+        <input type="number" id="customOz" value="12" min="0.5" step="0.5" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label>ABV %</label>
+        <input type="number" id="customAbv" value="5" min="0.5" step="0.5" inputmode="decimal">
+      </div>
+      <div class="field" style="flex:0 0 auto; align-self:flex-end;">
+        <button class="preset-btn" style="white-space:nowrap;" onclick="addCustom()">+ Add Custom</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Tonight's Drinks</div>
+    <div class="drink-list" id="drinkList"></div>
+    <div class="empty-msg" id="emptyMsg">No drinks added yet. Tap a preset above to start.</div>
+    <button class="preset-btn" style="width:100%; text-align:center; margin-top:10px;" onclick="newSession()">Start New Drinking Session</button>
+  </div>
+
+  <div class="card results">
+    <div class="bac-value" id="bacValue">0.000%</div>
+    <div class="bac-label">Estimated Blood Alcohol Content</div>
+    <div class="status-pill status-good" id="statusPill">SOBER</div>
+
+    <div class="bar-track"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+    <div class="bar-labels"><span>0.00</span><span>0.08 legal limit</span><span>0.20+</span></div>
+
+    <div class="sober-row">
+      <div class="sober-label">Time to Legal Limit (0.08%)</div>
+      <div class="sober-time" id="legalTime">—</div>
+    </div>
+
+    <div class="sober-row" style="margin-top:8px; padding-top:0; border-top:none;">
+      <div class="sober-label">Time Until 0.000%</div>
+      <div class="sober-time" id="soberTime">0h 0m</div>
+    </div>
+
+    <div class="effects-box">
+      <div class="effects-title">What You May Be Feeling</div>
+      <div id="effectsText"></div>
+    </div>
+  </div>
+
+  <div class="card chart-card">
+    <div class="section-label">BAC Over Time</div>
+    <div class="chart-wrap"><canvas id="bacChart"></canvas></div>
+    <div class="chart-legend">
+      <span><span class="legend-dot" style="background:#f3b25c;"></span>Estimated BAC</span>
+      <span><span class="legend-dot" style="background:#cf4b4b;"></span>0.08 legal limit</span>
+      <span><span class="legend-dot" style="background:#f1e6d8;"></span>Now</span>
+    </div>
+  </div>
+
+  <div class="footnote">
+    Estimates use the <b>Widmark formula</b> with a metabolism rate of 0.015% per hour, assuming all drinks consumed now. This is a rough estimate, not a medical or legal measurement — never drive based on this number. If impaired, call a ride, not yourself.
+  </div>
+
+</div>
+
+<script>
+var sex = 'male';
+var drinks = [];
+var idCounter = 1;
+var sessionAnchorEpoch = Date.now();
+var sessionAnchorMinutes = null;
+
+function pad2(n){ return (n<10?'0':'') + n; }
+
+function nowTimeStr(){
+  var d = new Date();
+  return pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+}
+
+function timeStrToMinutes(str){
+  var parts = str.split(':');
+  return parseInt(parts[0],10)*60 + parseInt(parts[1],10);
+}
+
+function minutesToTimeStr(mins){
+  var m = ((mins % 1440) + 1440) % 1440;
+  return pad2(Math.floor(m/60)) + ':' + pad2(m%60);
+}
+
+function minutesToTimeLabel(mins){
+  var m = ((Math.round(mins) % 1440) + 1440) % 1440;
+  var h = Math.floor(m/60);
+  var mm = m%60;
+  var ampm = (h>=12) ? 'PM' : 'AM';
+  var h12 = h%12; if(h12===0) h12=12;
+  return h12 + ':' + pad2(mm) + ' ' + ampm;
+}
+
+function addMinutesToTime(timeStr, mins){
+  return minutesToTimeStr(timeStrToMinutes(timeStr) + mins);
+}
+
+function getAnchorNow(){
+  return sessionAnchorMinutes + (Date.now() - sessionAnchorEpoch) / 60000;
+}
+
+function wallToAnchor(timeStr){
+  var diff = timeStrToMinutes(timeStr) - timeStrToMinutes(nowTimeStr());
+  return getAnchorNow() + diff;
+}
+
+function anchorToWall(anchorMin){
+  var diff = anchorMin - getAnchorNow();
+  return timeStrToMinutes(nowTimeStr()) + diff;
+}
+
+var STORAGE_KEY = 'timeToSober046';
+
+function saveState(){
+  try{
+    var weightVal = document.getElementById('weight').value;
+    var state = {
+      weight: weightVal,
+      sex: sex,
+      drinks: drinks,
+      idCounter: idCounter,
+      sessionAnchorEpoch: sessionAnchorEpoch,
+      sessionAnchorMinutes: sessionAnchorMinutes
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch(e){ /* storage unavailable, ignore */ }
+}
+
+function loadState(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    var state = JSON.parse(raw);
+    if(state.weight){ document.getElementById('weight').value = state.weight; }
+    if(state.sex){ sex = state.sex; }
+    if(Array.isArray(state.drinks)){ drinks = state.drinks; }
+    if(typeof state.idCounter === 'number'){ idCounter = state.idCounter; }
+    if(typeof state.sessionAnchorEpoch === 'number' && typeof state.sessionAnchorMinutes === 'number'){
+      sessionAnchorEpoch = state.sessionAnchorEpoch;
+      sessionAnchorMinutes = state.sessionAnchorMinutes;
+    }
+    for(var di=0; di<drinks.length; di++){
+      if(typeof drinks[di].start === 'string'){ drinks[di].start = timeStrToMinutes(drinks[di].start); }
+      if(typeof drinks[di].finish === 'string'){ drinks[di].finish = timeStrToMinutes(drinks[di].finish); }
+    }
+  } catch(e){ /* storage unavailable or corrupt, start fresh */ }
+}
+
+function setSex(s){
+  sex = s;
+  document.getElementById('sexMale').classList.toggle('active', s==='male');
+  document.getElementById('sexFemale').classList.toggle('active', s==='female');
+  calculate();
+}
+
+function addPreset(name, oz, abv, durationMin){
+  var start = getAnchorNow();
+  var dur = durationMin || 20;
+  drinks.push({id: idCounter++, name: name, oz: oz, abv: abv, qty: 1, start: start, finish: start + dur});
+  render();
+}
+
+function addCustom(){
+  var oz = parseFloat(document.getElementById('customOz').value) || 0;
+  var abv = parseFloat(document.getElementById('customAbv').value) || 0;
+  if(oz <= 0 || abv <= 0) return;
+  var name = oz + 'oz · ' + abv + '%';
+  var start = getAnchorNow();
+  drinks.push({id: idCounter++, name: 'Custom (' + name + ')', oz: oz, abv: abv, qty: 1, start: start, finish: start + 20});
+  render();
+}
+
+function setDrinkTime(id, key, value){
+  for(var i=0;i<drinks.length;i++){
+    if(drinks[i].id === id){
+      drinks[i][key] = wallToAnchor(value);
+      break;
+    }
+  }
+  calculate();
+}
+
+function changeQty(id, delta){
+  for(var i=0;i<drinks.length;i++){
+    if(drinks[i].id === id){
+      drinks[i].qty += delta;
+      if(drinks[i].qty <= 0){
+        drinks.splice(i,1);
+      }
+      break;
+    }
+  }
+  render();
+}
+
+function removeDrink(id){
+  for(var i=0;i<drinks.length;i++){
+    if(drinks[i].id === id){ drinks.splice(i,1); break; }
+  }
+  render();
+}
+
+function newSession(){
+  drinks = [];
+  idCounter = 1;
+  sessionAnchorEpoch = Date.now();
+  sessionAnchorMinutes = timeStrToMinutes(nowTimeStr());
+  render();
+}
+
+function render(){
+  var list = document.getElementById('drinkList');
+  var empty = document.getElementById('emptyMsg');
+  list.innerHTML = '';
+  if(drinks.length === 0){
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    for(var i=0;i<drinks.length;i++){
+      var d = drinks[i];
+      var row = document.createElement('div');
+      row.className = 'drink-row';
+
+      var top = document.createElement('div');
+      top.className = 'drink-row-top';
+
+      var info = document.createElement('div');
+      info.className = 'drink-info';
+      var nm = document.createElement('div');
+      nm.className = 'drink-name';
+      nm.textContent = d.name;
+      var det = document.createElement('div');
+      det.className = 'drink-detail';
+      det.textContent = d.oz + ' oz · ' + d.abv + '% ABV';
+      info.appendChild(nm);
+      info.appendChild(det);
+
+      var qtyWrap = document.createElement('div');
+      qtyWrap.className = 'qty-controls';
+      var minus = document.createElement('div');
+      minus.className = 'qty-btn';
+      minus.textContent = '−';
+      minus.onclick = (function(id){ return function(){ changeQty(id,-1); }; })(d.id);
+      var qty = document.createElement('div');
+      qty.style.minWidth = '24px';
+      qty.style.textAlign = 'center';
+      qty.style.fontFamily = "'Helvetica Neue', Arial, sans-serif";
+      qty.style.fontWeight = '700';
+      qty.style.fontSize = '15px';
+      qty.textContent = d.qty;
+      var plus = document.createElement('div');
+      plus.className = 'qty-btn';
+      plus.textContent = '+';
+      plus.onclick = (function(id){ return function(){ changeQty(id,1); }; })(d.id);
+      qtyWrap.appendChild(minus);
+      qtyWrap.appendChild(qty);
+      qtyWrap.appendChild(plus);
+
+      var remove = document.createElement('div');
+      remove.className = 'remove-btn';
+      remove.textContent = '×';
+      remove.onclick = (function(id){ return function(){ removeDrink(id); }; })(d.id);
+
+      top.appendChild(info);
+      top.appendChild(qtyWrap);
+      top.appendChild(remove);
+      row.appendChild(top);
+
+      var timeRow = document.createElement('div');
+      timeRow.className = 'time-row';
+
+      var startField = document.createElement('div');
+      startField.className = 'time-field';
+      var startLabel = document.createElement('label');
+      startLabel.textContent = 'Started';
+      var startInput = document.createElement('input');
+      startInput.type = 'time';
+      startInput.value = minutesToTimeStr(Math.round(anchorToWall(d.start)));
+      startInput.onchange = (function(id){ return function(e){ setDrinkTime(id, 'start', e.target.value); }; })(d.id);
+      startField.appendChild(startLabel);
+      startField.appendChild(startInput);
+
+      var finishField = document.createElement('div');
+      finishField.className = 'time-field';
+      var finishLabel = document.createElement('label');
+      finishLabel.textContent = 'Finished';
+      var finishInput = document.createElement('input');
+      finishInput.type = 'time';
+      finishInput.value = minutesToTimeStr(Math.round(anchorToWall(d.finish)));
+      finishInput.onchange = (function(id){ return function(e){ setDrinkTime(id, 'finish', e.target.value); }; })(d.id);
+      finishField.appendChild(finishLabel);
+      finishField.appendChild(finishInput);
+
+      timeRow.appendChild(startField);
+      timeRow.appendChild(finishField);
+      row.appendChild(timeRow);
+
+      list.appendChild(row);
+    }
+  }
+  calculate();
+}
+
+function calculate(){
+  var weightLb = parseFloat(document.getElementById('weight').value) || 0;
+  var weightG = weightLb * 453.592;
+  var r = (sex === 'male') ? 0.68 : 0.55;
+
+  var points = computeCurve(weightG, r);
+  var nowMin = getAnchorNow();
+  var bac = points ? bacAtTime(points, nowMin) : 0;
+  if(bac < 0) bac = 0;
+
+  var bacValue = document.getElementById('bacValue');
+  bacValue.textContent = bac.toFixed(3) + '%';
+
+  var pill = document.getElementById('statusPill');
+  var fill = document.getElementById('barFill');
+  var pct = Math.min((bac / 0.20) * 100, 100);
+  fill.style.width = pct + '%';
+
+  pill.className = 'status-pill';
+  if(bac < 0.04){
+    pill.classList.add('status-good');
+    pill.textContent = 'SOBER';
+  } else if(bac < 0.08){
+    pill.classList.add('status-warn');
+    pill.textContent = 'BUZZED';
+  } else if(bac < 0.15){
+    pill.classList.add('status-danger');
+    pill.textContent = 'IMPAIRED';
+  } else {
+    pill.classList.add('status-danger');
+    pill.textContent = 'HIGH RISK';
+  }
+
+  var legalEl = document.getElementById('legalTime');
+  var soberEl = document.getElementById('soberTime');
+  if(!points){
+    legalEl.textContent = '—';
+    soberEl.textContent = '—';
+  } else {
+    legalEl.textContent = formatCountdown(timeUntilBelow(points, nowMin, 0.08));
+    soberEl.textContent = formatCountdown(timeUntilBelow(points, nowMin, 0.0005));
+  }
+
+  document.getElementById('effectsText').textContent = getEffectsText(bac, sex);
+
+  saveState();
+  drawChart();
+}
+
+function getEffectsText(bac, sexVal){
+  var base, femaleNote, maleNote;
+
+  if(bac < 0.01){
+    base = 'No measurable effect. You should feel essentially normal.';
+    femaleNote = '';
+    maleNote = '';
+  } else if(bac < 0.03){
+    base = 'Mild relaxation and a slight mood lift. Most people feel little to no impairment, though reaction time may be very slightly slower than normal.';
+    femaleNote = 'At this level women often feel the relaxing effects a bit sooner than men, since alcohol tends to reach the bloodstream a little faster in female physiology.';
+    maleNote = 'Men typically notice only a faint warmth or looseness at this stage, with coordination and judgment still close to baseline.';
+  } else if(bac < 0.06){
+    base = 'Noticeable lightheadedness, talkativeness, and lowered inhibitions. Fine motor skills and judgment are mildly affected even if you feel "fine."';
+    femaleNote = 'Women commonly report feeling this stage more intensely than men at the same reading, due to generally lower body water percentage concentrating alcohol more in the bloodstream.';
+    maleNote = 'Men may feel a confident, relaxed buzz here while still underestimating how much coordination and judgment have already slipped.';
+  } else if(bac < 0.08){
+    base = 'Clear impairment of balance, reaction time, and decision-making, even though you may still feel mostly in control. This is the range where driving ability is meaningfully compromised.';
+    femaleNote = 'For many women, this range can bring on noticeable warmth, flushing, or queasiness sooner than men experience at the same BAC.';
+    maleNote = 'Men often feel talkative and self-assured here, which can mask real declines in reaction time and judgment.';
+  } else if(bac < 0.10){
+    base = 'You have reached or passed the legal driving limit. Expect slurred speech, reduced coordination, blurred vision, and noticeably impaired judgment and self-control.';
+    femaleNote = 'Women frequently report stronger nausea, flushing, and a faster onset of fatigue at this level compared to men with the same reading.';
+    maleNote = 'Men at this level often still feel "fine to drive," which is precisely the danger zone — impairment is real even when confidence is high.';
+  } else if(bac < 0.15){
+    base = 'Significant intoxication: slurred speech, poor balance, slowed reflexes, and difficulty processing information. Memory gaps may begin to form.';
+    femaleNote = 'Women tend to feel sedation and nausea more strongly in this range, and may become sleepy faster than men at the same BAC.';
+    maleNote = 'Men often push through feeling "okay" longer in this range, even as coordination and speech are clearly affected to others.';
+  } else if(bac < 0.20){
+    base = 'Major impairment: very poor coordination, blurred or double vision, nausea, and a real risk of memory blackouts. Judgment is severely compromised.';
+    femaleNote = 'Vomiting and severe nausea tend to occur somewhat more readily for women in this range.';
+    maleNote = 'Men in this range commonly experience a sharp drop-off in coordination and speech clarity, often more suddenly than they expect.';
+  } else if(bac < 0.30){
+    base = 'Severe intoxication. Confusion, loss of balance, vomiting, and blackouts are likely. This is a level where medical risk becomes a real concern for anyone.';
+    femaleNote = 'At this level, women face a notably higher risk of alcohol poisoning symptoms relative to men of similar weight, due to lower average body water content.';
+    maleNote = 'Men can sometimes still be ambulatory at this level, which can mask how dangerous the underlying impairment and health risk actually are.';
+  } else {
+    base = 'Life-threatening territory. Loss of consciousness, dangerously slowed breathing, and alcohol poisoning are real risks. If anyone is at this level, seek emergency medical help.';
+    femaleNote = 'Women are statistically more vulnerable to severe alcohol poisoning at this level than men of comparable weight.';
+    maleNote = 'Even men with high tolerance face serious medical risk at this level — tolerance affects how drunk someone feels, not how dangerous their BAC actually is.';
+  }
+
+  var note = (sexVal === 'female') ? femaleNote : maleNote;
+  return base + (note ? ' ' + note : '');
+}
+
+function bacAtTime(points, t){
+  if(t <= points[0].t) return points[0].bac;
+  if(t >= points[points.length-1].t) return points[points.length-1].bac;
+  for(var i=0;i<points.length-1;i++){
+    if(t >= points[i].t && t <= points[i+1].t){
+      var frac = (t - points[i].t) / (points[i+1].t - points[i].t);
+      return points[i].bac + frac * (points[i+1].bac - points[i].bac);
+    }
+  }
+  return points[points.length-1].bac;
+}
+
+function timeUntilBelow(points, nowMin, threshold){
+  var current = bacAtTime(points, nowMin);
+  if(current <= threshold) return 0;
+  for(var i=0;i<points.length-1;i++){
+    if(points[i+1].t <= nowMin) continue;
+    var a = (points[i].t < nowMin) ? nowMin : points[i].t;
+    var bacA = bacAtTime(points, a);
+    var bacB = points[i+1].bac;
+    var tB = points[i+1].t;
+    if(bacA > threshold && bacB <= threshold){
+      var frac = (bacA - threshold) / (bacA - bacB);
+      var crossT = a + frac * (tB - a);
+      return crossT - nowMin;
+    }
+  }
+  var last = points[points.length-1];
+  if(last.bac > threshold){
+    return (last.t - nowMin) + (last.bac - threshold) / 0.015 * 60;
+  }
+  return 0;
+}
+
+function formatCountdown(mins){
+  if(mins <= 0.5) return 'Now';
+  var total = Math.round(mins);
+  var h = Math.floor(total / 60);
+  var m = total % 60;
+  return h + 'h ' + m + 'm';
+}
+
+function computeCurve(weightG, r){
+  if(drinks.length === 0 || weightG <= 0) return null;
+
+  var contributions = [];
+  var minStart = Infinity, maxSober = -Infinity;
+
+  for(var i=0;i<drinks.length;i++){
+    var d = drinks[i];
+    var volumeMl = d.oz * 29.5735;
+    var alcoholG = volumeMl * (d.abv / 100) * 0.789 * d.qty;
+    var peak = (alcoholG / (weightG * r)) * 100;
+
+    var start = d.start;
+    var finish = d.finish;
+    if(finish <= start) finish = start + 1;
+
+    var soberAt = finish + (peak / 0.015) * 60;
+
+    contributions.push({peak: peak, start: start, finish: finish});
+    if(start < minStart) minStart = start;
+    if(soberAt > maxSober) maxSober = soberAt;
+  }
+
+  var domainStart = minStart - 30;
+  var domainEnd = maxSober + 30;
+  if(domainEnd - domainStart < 120) domainEnd = domainStart + 120;
+
+  var points = [];
+  var step = 5;
+  for(var t = domainStart; t <= domainEnd; t += step){
+    var total = 0;
+    for(var j=0;j<contributions.length;j++){
+      var c = contributions[j];
+      var contrib = 0;
+      if(t <= c.start){
+        contrib = 0;
+      } else if(t < c.finish){
+        var x = (t - c.start) / (c.finish - c.start);
+        contrib = c.peak * (1 - (1-x)*(1-x));
+      } else {
+        contrib = c.peak - 0.015 * ((t - c.finish) / 60);
+        if(contrib < 0) contrib = 0;
+      }
+      total += contrib;
+    }
+    if(total < 0) total = 0;
+    points.push({t: t, bac: total});
+  }
+  return points;
+}
+
+function drawChart(){
+  var canvas = document.getElementById('bacChart');
+  var wrap = canvas.parentNode;
+  var dpr = window.devicePixelRatio || 1;
+  var cw = wrap.clientWidth;
+  var ch = wrap.clientHeight;
+  if(cw <= 0 || ch <= 0) return;
+
+  canvas.width = cw * dpr;
+  canvas.height = ch * dpr;
+  canvas.style.width = cw + 'px';
+  canvas.style.height = ch + 'px';
+
+  var ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, cw, ch);
+
+  var weightLb = parseFloat(document.getElementById('weight').value) || 0;
+  var weightG = weightLb * 453.592;
+  var r = (sex === 'male') ? 0.68 : 0.55;
+  var points = computeCurve(weightG, r);
+
+  ctx.font = "11px 'Helvetica Neue', Arial, sans-serif";
+
+  if(!points){
+    ctx.fillStyle = '#b8a995';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Add drinks to see your BAC curve', cw/2, ch/2);
+    return;
+  }
+
+  var padLeft = 42, padRight = 12, padTop = 14, padBottom = 24;
+  var plotW = cw - padLeft - padRight;
+  var plotH = ch - padTop - padBottom;
+
+  var maxBac = 0.08;
+  for(var i=0;i<points.length;i++){ if(points[i].bac > maxBac) maxBac = points[i].bac; }
+  maxBac = Math.ceil((maxBac * 1.15) / 0.04) * 0.04;
+  if(maxBac < 0.08) maxBac = 0.08;
+
+  var domainStart = points[0].t;
+  var domainEnd = points[points.length-1].t;
+  var span = domainEnd - domainStart;
+  if(span <= 0) span = 1;
+
+  function xFor(t){ return padLeft + (t - domainStart) / span * plotW; }
+  function yFor(b){ return padTop + plotH - (b / maxBac) * plotH; }
+
+  ctx.strokeStyle = '#3d2f23';
+  ctx.lineWidth = 1;
+  ctx.fillStyle = '#b8a995';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  for(var g = 0; g <= maxBac + 0.0001; g += 0.04){
+    var y = yFor(g);
+    ctx.beginPath();
+    ctx.moveTo(padLeft, y);
+    ctx.lineTo(cw - padRight, y);
+    ctx.stroke();
+    ctx.fillText(g.toFixed(2), padLeft - 6, y);
+  }
+
+  if(0.08 <= maxBac){
+    var y08 = yFor(0.08);
+    ctx.save();
+    ctx.strokeStyle = '#cf4b4b';
+    ctx.setLineDash([4,4]);
+    ctx.beginPath();
+    ctx.moveTo(padLeft, y08);
+    ctx.lineTo(cw - padRight, y08);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  ctx.fillStyle = '#b8a995';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  var labelCount = 4;
+  for(var li=0; li<=labelCount; li++){
+    var t = domainStart + span * (li/labelCount);
+    ctx.fillText(minutesToTimeLabel(anchorToWall(t)), xFor(t), ch - padBottom + 6);
+  }
+
+  ctx.beginPath();
+  ctx.moveTo(xFor(points[0].t), yFor(0));
+  for(var p=0;p<points.length;p++){
+    ctx.lineTo(xFor(points[p].t), yFor(points[p].bac));
+  }
+  ctx.lineTo(xFor(points[points.length-1].t), yFor(0));
+  ctx.closePath();
+  var grad = ctx.createLinearGradient(0, padTop, 0, ch - padBottom);
+  grad.addColorStop(0, 'rgba(217,142,63,0.35)');
+  grad.addColorStop(1, 'rgba(217,142,63,0.02)');
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(xFor(points[0].t), yFor(points[0].bac));
+  for(var p2=1;p2<points.length;p2++){
+    ctx.lineTo(xFor(points[p2].t), yFor(points[p2].bac));
+  }
+  ctx.strokeStyle = '#f3b25c';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  var nowMin = sessionAnchorMinutes + (Date.now() - sessionAnchorEpoch) / 60000;
+  if(nowMin >= domainStart && nowMin <= domainEnd){
+    var nx = xFor(nowMin);
+    ctx.save();
+    ctx.strokeStyle = '#f1e6d8';
+    ctx.setLineDash([2,3]);
+    ctx.beginPath();
+    ctx.moveTo(nx, padTop);
+    ctx.lineTo(nx, ch - padBottom);
+    ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = '#f1e6d8';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText('now', nx, padTop + 10);
+  }
+}
+
+window.addEventListener('resize', drawChart);
+
+document.getElementById('weight').addEventListener('input', calculate);
+
+loadState();
+if(sessionAnchorMinutes === null){ sessionAnchorMinutes = timeStrToMinutes(nowTimeStr()); }
+document.getElementById('sexMale').classList.toggle('active', sex==='male');
+document.getElementById('sexFemale').classList.toggle('active', sex==='female');
+render();
+
+setInterval(calculate, 30000);
+</script>
+
+</body>
+</html>
